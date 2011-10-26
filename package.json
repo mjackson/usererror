@@ -1,0 +1,21 @@
+{
+  "author": "Michael Jackson <mjijackson@gmail.com>",
+  "name": "error",
+  "description": "A base class for V8 JavaScript errors",
+  "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mjijackson/error.git"
+  },
+  "main": ".",
+  "scripts": {
+    "test": "vows test.js"
+  },
+  "engines": {
+    "node": "~0.4.12"
+  },
+  "dependencies": {},
+  "devDependencies": {
+      "vows": "~0.5.9"
+  }
+}

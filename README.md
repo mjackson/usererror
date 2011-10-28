@@ -12,7 +12,7 @@ benefits:
 Install this package using [npm](http://npmjs.org):
 
 ``` bash
-$ npm install error
+$ npm install usererror
 ```
 
 You are also free to [browse or download the source](https://github.com/mjijackson/error).
@@ -22,7 +22,7 @@ You are also free to [browse or download the source](https://github.com/mjijacks
 The simplest usage for this class is:
 
 ``` javascript
-var UserError = require("error");
+var UserError = require("usererror");
 
 try {
     throw new UserError("Kaboom!");
@@ -54,7 +54,7 @@ the stack trace for the error one level deep.
 
 ``` javascript
 var util = require("util"),
-    UserError = require("error");
+    UserError = require("usererror");
 
 function LoginFailedError(cause) {
     UserError.call(this, "Login failed", cause);

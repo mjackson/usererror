@@ -2,20 +2,20 @@
   "author": "Michael Jackson <mjijackson@gmail.com>",
   "name": "usererror",
   "description": "A base class for V8 JavaScript errors",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "repository": {
     "type": "git",
     "url": "git://github.com/mjijackson/usererror.git"
   },
-  "main": ".",
+  "main": "./usererror.js",
   "scripts": {
-    "test": "vows test.js"
+    "test": "vows usererror_test.js"
   },
   "engines": {
-    "node": "~0.4.7"
+    "node": ">=0.4.7"
   },
   "dependencies": {},
   "devDependencies": {
-      "vows": "~0.5.9"
+    "vows": "~0.5.9"
   }
 }

@@ -1,0 +1,116 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>UserError by mjijackson</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>UserError</h1>
+        <p>A base class for V8 JavaScript errors</p>
+
+        <p class="view"><a href="https://github.com/mjijackson/usererror">View the Project on GitHub <small>mjijackson/usererror</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/mjijackson/usererror/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/mjijackson/usererror/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/mjijackson/usererror">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <p>UserError is a base constructor (i.e. "class") that makes JavaScript errors on V8 a lot more useful. Errors built using this class have the following benefits:</p>
+
+<ul>
+<li>They are easily subclassed</li>
+<li>They are nestable (see below)</li>
+</ul><h2>Installation</h2>
+
+<p>Install this package using <a href="http://npmjs.org">npm</a>:</p>
+
+<pre><code>$ npm install usererror
+</code></pre>
+
+<p>You are also free to <a href="https://github.com/mjijackson/error">browse or download the source</a>.</p>
+
+<h2>Usage</h2>
+
+<p>The simplest usage for this class is:</p>
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">UserError</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'usererror'</span><span class="p">);</span>
+
+<span class="k">try</span> <span class="p">{</span>
+  <span class="k">throw</span> <span class="k">new</span> <span class="nx">UserError</span><span class="p">(</span><span class="s1">'Kaboom!'</span><span class="p">);</span>
+<span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>Errors are nestable, so an error can have a reference to another error that caused it. This is useful when you'd like to throw a high level error that was actually caused by some lower level error. The error that was the cause is used as the second argument to the constructor.</p>
+
+<p>In the example below, we define our own error class <code>LoginFailedError</code> that inherits from <code>UserError</code>. An instance of this class is passed to the <code>loginUser</code> callback when it fails for some reason. Inside <code>loginUser</code> we try and connect to the database. In reality, we could be doing any number of things that may ultimately cause an error (e.g. reading from a flat file of user data, validating the user id, etc.). However, we want callers to know that <code>loginUser</code> will always return a <code>LoginFailedError</code> if it fails, and not some other error.</p>
+
+<p>The solution is to wrap any other error in a <code>LoginFailedError</code> before passing it back up the callback chain. This allows us to preserve the full stack trace of the error (in the <code>fullStack</code> property) while giving callers a reasonable expectation for what class(es) of errors they can expect.</p>
+
+<p>Note: The <code>stack</code> property still works as you would expect, and only contains the stack trace for the error one level deep.</p>
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">util</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'util'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">UserError</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'usererror'</span><span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">LoginFailedError</span><span class="p">(</span><span class="nx">cause</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">UserError</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s1">'Login failed'</span><span class="p">,</span> <span class="nx">cause</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nx">util</span><span class="p">.</span><span class="nx">inherits</span><span class="p">(</span><span class="nx">LoginFailedError</span><span class="p">,</span> <span class="nx">UserError</span><span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">loginUser</span><span class="p">(</span><span class="nx">userId</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">connectToDatabase</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">db</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">callback</span><span class="p">(</span><span class="k">new</span> <span class="nx">LoginFailedError</span><span class="p">(</span><span class="nx">err</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Login the user.</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+
+<span class="nx">loginUser</span><span class="p">(</span><span class="nx">myUserId</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nx">fullStack</span><span class="p">);</span> <span class="c1">// Recursive stack trace.</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nx">stack</span><span class="p">);</span> <span class="c1">// Single-level stack trace.</span>
+<span class="p">});</span>
+</pre></div>
+
+<h2>Tests</h2>
+
+<p>Run the tests with <a href="http://visionmedia.github.com/mocha/">mocha</a>:</p>
+
+<pre><code>$ mocha test
+</code></pre>
+
+<h2>License</h2>
+
+<p>Copyright 2012 Michael Jackson</p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+
+<p>The software is provided "as is", without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose and non-infringement. In no event shall the authors or copyright holders be liable for any claim, damages or other liability, whether in an action of contract, tort or otherwise, arising from, out of or in connection with the software or the use or other dealings in the software.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/mjijackson">mjijackson</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>

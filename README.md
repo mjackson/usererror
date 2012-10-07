@@ -78,6 +78,12 @@ loginUser(myUserId, function (err) {
 });
 ```
 
+## Tests
+
+Run the tests with [mocha](http://visionmedia.github.com/mocha/):
+
+    $ mocha test
+
 ## License
 
 Copyright 2011 Michael Jackson

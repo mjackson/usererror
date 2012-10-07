@@ -1,4 +1,6 @@
-Because JavaScript errors could be a lot more useful.
+[![build status](https://secure.travis-ci.org/mjijackson/usererror.png)](http://travis-ci.org/mjijackson/usererror)
+
+UserError: Because JavaScript errors could be a lot more useful.
 
 This package provides a base constructor (i.e. "class") that makes JavaScript
 errors on V8 a lot more useful. Errors built using this class have the following
@@ -11,9 +13,7 @@ benefits:
 
 Install this package using [npm](http://npmjs.org):
 
-``` bash
-$ npm install usererror
-```
+    $ npm install usererror
 
 You are also free to [browse or download the source](https://github.com/mjijackson/error).
 
@@ -21,13 +21,13 @@ You are also free to [browse or download the source](https://github.com/mjijacks
 
 The simplest usage for this class is:
 
-``` javascript
-var UserError = require("usererror");
+```javascript
+var UserError = require('usererror');
 
 try {
-    throw new UserError("Kaboom!");
+  throw new UserError('Kaboom!');
 } catch (e) {
-    console.log(e.message);
+  console.log(e.message);
 }
 ```
 
@@ -52,29 +52,29 @@ expectation for what class(es) of errors they can expect.
 Note: The `stack` property still works as you would expect, and only contains
 the stack trace for the error one level deep.
 
-``` javascript
-var util = require("util"),
-    UserError = require("usererror");
+```javascript
+var util = require('util');
+var UserError = require('usererror');
 
 function LoginFailedError(cause) {
-    UserError.call(this, "Login failed", cause);
+  UserError.call(this, 'Login failed', cause);
 }
 
 util.inherits(LoginFailedError, UserError);
 
 function loginUser(userId, callback) {
-    connectToDatabase(function (err, db) {
-        if (err) {
-            callback(new LoginFailedError(err));
-        }
+  connectToDatabase(function (err, db) {
+    if (err) {
+      callback(new LoginFailedError(err));
+    }
 
-        // Login the user.
-    });
+    // Login the user.
+  });
 }
 
 loginUser(myUserId, function (err) {
-    console.log(err.fullStack); // Recursive stack trace.
-    console.log(err.stack); // Single-level stack trace.
+  console.log(err.fullStack); // Recursive stack trace.
+  console.log(err.stack); // Single-level stack trace.
 });
 ```
 

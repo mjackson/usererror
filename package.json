@@ -9,13 +9,13 @@
   },
   "main": "./user-error.js",
   "scripts": {
-    "test": "vows test/user-error-test.js"
+    "test": "mocha"
   },
   "engines": {
     "node": ">=0.4.7"
   },
   "dependencies": {},
   "devDependencies": {
-    "vows": "~0.5.9"
+    "mocha": "1.5.0"
   }
 }

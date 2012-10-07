@@ -1,4 +1,4 @@
-var util = require("util");
+var util = require('util');
 
 module.exports = UserError;
 
@@ -9,21 +9,21 @@ module.exports = UserError;
  * lower level.
  */
 function UserError(message, cause) {
-    Error.call(this);
-    Error.captureStackTrace(this, this.constructor);
-    this.name = this.constructor.name;
-    this.message = message;
-    this.cause = cause;
+  Error.call(this);
+  Error.captureStackTrace(this, this.constructor);
+  this.name = this.constructor.name;
+  this.message = message;
+  this.cause = cause;
 }
 
 util.inherits(UserError, Error);
 
-UserError.prototype.__defineGetter__("fullStack", function fullStack() {
-    var stack = this.stack;
+UserError.prototype.__defineGetter__('fullStack', function () {
+  var stack = this.stack;
 
-    if (this.cause) {
-        stack += "\nCaused by " + (this.cause.fullStack || this.cause.stack);
-    }
+  if (this.cause) {
+    stack += '\nCaused by ' + (this.cause.fullStack || this.cause.stack);
+  }
 
-    return stack;
+  return stack;
 });

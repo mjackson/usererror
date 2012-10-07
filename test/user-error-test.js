@@ -1,6 +1,5 @@
 var assert = require('assert');
 var util = require('util');
-var vows = require('vows');
 var UserError = require('../user-error');
 
 describe('A UserError', function () {

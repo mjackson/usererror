@@ -7,9 +7,9 @@
     "type": "git",
     "url": "git://github.com/mjijackson/usererror.git"
   },
-  "main": "./usererror.js",
+  "main": "./user-error.js",
   "scripts": {
-    "test": "vows usererror_test.js"
+    "test": "vows test/user-error-test.js"
   },
   "engines": {
     "node": ">=0.4.7"

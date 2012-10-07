@@ -1,7 +1,7 @@
-var assert = require("assert"),
-    util = require("util"),
-    vows = require("vows"),
-    UserError = require("./usererror");
+var assert = require("assert");
+var util = require("util");
+var vows = require("vows");
+var UserError = require("../user-error");
 
 function MyError(message, cause) {
     message = message || "Boom!";

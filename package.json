@@ -1,7 +1,7 @@
 {
   "name": "usererror",
   "version": "1.0.2",
-  "description": "A base class for V8 JavaScript errors",
+  "description": "A base class for JavaScript errors",
   "author": "Michael Jackson",
   "license": "MIT",
   "main": "lib",
